@@ -4,7 +4,9 @@
             <p>
                 Token : <span class="active">{{ store.getToken }}</span>
             </p>
-            <div>
+        </div>
+        <main>
+            <div class="shadow">
                 <select
                     name="type"
                     id="type"
@@ -17,29 +19,31 @@
                     <option value="delete">DELETE</option>
                     <option value="read">READ</option>
                 </select>
-                <input
-                    type="text"
-                    class="shadow"
-                    v-show="showId"
-                    v-model="id"
-                    placeholder="id"
-                />
-                <input
-                    type="text"
-                    class="shadow"
-                    v-show="showName"
-                    v-model="name"
-                    placeholder="name"
-                />
+                <div>
+                    <input
+                        type="text"
+                        v-show="showId"
+                        v-model="id"
+                        class="shadow"
+                        placeholder="id"
+                    />
+                    <input
+                        type="text"
+                        v-show="showName"
+                        v-model="name"
+                        class="shadow"
+                        placeholder="name"
+                    />
+                </div>
                 <button class="shadow" @click="action">ACTION</button>
             </div>
-        </div>
-        <ul class="list shadow">
-            <li v-for="(list, index) in store.getList" :key="index">
-                <span>ID &nbsp;{{ index }}</span
-                >{{ list }}
-            </li>
-        </ul>
+            <ul class="list shadow">
+                <li v-for="(list, index) in store.getList" :key="index">
+                    <span>ID &nbsp;{{ index }}</span
+                    >{{ list }}
+                </li>
+            </ul>
+        </main>
     </div>
 </template>
 
@@ -100,9 +104,10 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .wrap {
     max-width: 60%;
+    padding-bottom: 100px;
 }
 
 .shadow {
@@ -112,54 +117,64 @@ export default {
 .title {
     padding-bottom: 70px;
     display: flex;
+    > p {
+        font-size: 34px;
+        font-weight: bold;
+        flex-basis: 50%;
+    }
 }
 
-.title > p {
-    font-size: 34px;
-    font-weight: bold;
-    flex-basis: 50%;
-}
-
-.title > div {
-    flex-basis: 50%;
+main {
     display: flex;
-    justify-content: flex-end;
-}
+    align-items: flex-start;
+    > div {
+        flex-basis: 30%;
+        display: flex;
+        border-radius: 10px;
+        flex-direction: column;
+        background-color: #fff;
+        padding: 20px;
+        > * {
+            width: 100%;
+            margin: 5px 0px;
+        }
+        select {
+            font-size: 20px;
+            margin-right: auto;
+        }
+        div {
+            display: flex;
+            flex-direction: column;
+            input {
+                width: 100%;
+                padding: 10px;
+                border: 0;
+            }
+        }
+        button {
+            padding: 10px;
+        }
+    }
+    .list {
+        flex-basis: 70%;
+        background-color: #fff;
+        border-radius: 10px;
+        list-style: none;
+        max-width: 500px;
+        min-height: 358px;
 
-.title > div > * {
-    margin: 5px 0;
-    height: calc(100% - 10px);
-    border-radius: 20px;
-    padding: 0px 20px;
-    margin-left: 5px;
-}
-
-.title > div select {
-    margin-right: auto;
-}
-
-.title > div input {
-    max-width: 100px;
-}
-
-.list {
-    background-color: #fff;
-    border-radius: 10px;
-    list-style: none;
-    max-width: 500px;
-}
-
-.list li {
-    padding: 20px 20px;
-}
-
-.list li span {
-    display: inline-block;
-    background-color: #eaf0f5;
-    border-radius: 20px;
-    padding: 5px;
-    color: #9194ab;
-    font-weight: bold;
-    margin-right: 50px;
+        li {
+            padding: 20px;
+            span {
+                display: inline-block;
+                background-color: #eaf0f5;
+                border-radius: 20px;
+                padding: 5px;
+                color: #9194ab;
+                font-weight: bold;
+                margin-right: 50px;
+            }
+        }
+    }
 }
 </style>

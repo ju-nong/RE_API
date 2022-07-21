@@ -68,8 +68,6 @@ app.post("/service/create", (req, res, next) => {
 });
 
 app.post("/service/update", (req, res, next) => {
-    console.log(req.body);
-
     const { id, name } = req.body;
 
     const target = list[req.headers.token];

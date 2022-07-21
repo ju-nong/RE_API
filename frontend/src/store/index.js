@@ -36,6 +36,7 @@ export const useStore = defineStore("store", {
         },
         logout() {
             this.token = null;
+            this.list = null;
         },
         create() {
             const name = this.name;
