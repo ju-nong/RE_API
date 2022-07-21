@@ -21,25 +21,22 @@
                     type="text"
                     class="shadow"
                     v-show="showId"
-                    v-model="listId"
+                    v-model="id"
                     placeholder="id"
                 />
                 <input
                     type="text"
                     class="shadow"
                     v-show="showName"
-                    v-model="listName"
+                    v-model="name"
                     placeholder="name"
                 />
                 <button class="shadow" @click="action">ACTION</button>
             </div>
         </div>
         <ul class="list shadow">
-            <li
-                v-for="(list, index) in store.getList[store.getToken]"
-                :key="index"
-            >
-                <span>ID &nbsp;{{ index + 1 }}</span
+            <li v-for="(list, index) in store.getList" :key="index">
+                <span>ID &nbsp;{{ index }}</span
                 >{{ list }}
             </li>
         </ul>
@@ -55,23 +52,27 @@ export default {
     setup() {
         const store = useStore();
 
-        const listId = ref("");
-        const listName = ref("");
+        const id = ref("");
+        const name = ref("");
 
         const type = ref("create");
         const showId = ref(false);
         const showName = ref(true);
 
         const changeType = () => {
-            listId.value = "";
-            listName.value = "";
+            id.value = "";
+            name.value = "";
 
             const t = type.value;
 
-            showId.value = t == "create" ? false : true;
-            showName.value = t == "delete" ? false : true;
-            if (t == "read") {
+            if (t == "create" || t == "read") {
                 showId.value = false;
+            } else {
+                showId.value = true;
+            }
+            if (t == "create" || t == "update") {
+                showName.value = true;
+            } else {
                 showName.value = false;
             }
         };
@@ -85,10 +86,16 @@ export default {
 
         const action = () => {
             const t = type.value;
-            actions[t]();
+
+            store.set(parseInt(id.value), name.value);
+            if (actions[t]()) {
+                alert("값을 다시 입력해주세요.");
+            }
+            id.value = "";
+            name.value = "";
         };
 
-        return { store, listId, listName, type, showId, showName, action };
+        return { store, id, name, type, showId, showName, changeType, action };
     },
 };
 </script>

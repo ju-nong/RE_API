@@ -1,6 +1,7 @@
 import Send from "./";
 
 export default {
+    name: "service",
     create(name) {
         return Send({
             url: `/service/create`,

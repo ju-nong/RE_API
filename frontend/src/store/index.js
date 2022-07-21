@@ -4,21 +4,32 @@ import sign from "@api/sign";
 import service from "@api/service";
 import axios from "axios";
 
+function valChk(value) {
+    if (value === null || value === undefined || value.trim() === "") {
+        return true;
+    }
+
+    return false;
+}
+
 export const useStore = defineStore("store", {
     state: () => ({
         token: null,
         id: null,
         name: null,
-        list: {},
+        list: [],
     }),
     actions: {
+        set(id, name) {
+            this.id = id;
+            this.name = name;
+        },
         login() {
             sign.login()
                 .then((res) => {
                     this.token = res.data.response;
                 })
                 .catch((error) => {
-                    console.log(error);
                     this.warning(error.response);
                 });
             this.token = sign;
@@ -26,17 +37,92 @@ export const useStore = defineStore("store", {
         logout() {
             this.token = null;
         },
-        set(id, name) {
-            this.id = id;
-            this.name = name;
-        },
         create() {
-            console.log(this.name);
+            const name = this.name;
+
+            if (valChk(name)) {
+                return true;
+            }
+
             service
-                .create(this.name)
+                .create(name)
+                .then((res) => {
+                    const { status, errorMessage } = res.data;
+                    if (status === 1) {
+                        alert(errorMessage);
+                    } else {
+                        this.read();
+                    }
+                })
+                .catch((error) => {
+                    if (axios.isCancel(error)) {
+                        alert(error.message);
+                    } else {
+                        this.warning(error.reponse);
+                    }
+                });
+        },
+        update() {
+            const id = this.id;
+            const name = this.name;
+
+            if (isNaN(id) || valChk(name)) {
+                return true;
+            }
+
+            service
+                .update(id, name)
+                .then((res) => {
+                    const { status, errorMessage } = res.data;
+                    if (status === 1) {
+                        alert(errorMessage);
+                    } else {
+                        this.read();
+                    }
+                })
+                .catch((error) => {
+                    if (axios.isCancel(error)) {
+                        alert(error.message);
+                    } else {
+                        this.warning(error.reponse);
+                    }
+                });
+        },
+        del() {
+            const id = this.id;
+
+            if (isNaN(id)) {
+                return true;
+            }
+
+            service
+                .delete(id)
+                .then((res) => {
+                    const { status, errorMessage } = res.data;
+                    if (status === 1) {
+                        alert(errorMessage);
+                    } else {
+                        this.read();
+                    }
+                })
+                .catch((error) => {
+                    if (axios.isCancel(error)) {
+                        alert(error.message);
+                    } else {
+                        this.warning(error.reponse);
+                    }
+                });
+        },
+        read() {
+            service
+                .read()
                 .then((res) => {
                     console.log(res);
-                    alert("생성되었습니다.");
+                    if (res.data.status === 1) {
+                        this.warning(res);
+                    } else {
+                        this.list = res.data.response;
+                    }
                 })
                 .catch((error) => {
                     console.log("error", error);

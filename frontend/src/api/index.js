@@ -2,7 +2,7 @@ import axios from "axios";
 import useStore from "@store";
 
 const instance = axios.create({
-    baseURL: "http://localhost:4020/",
+    baseURL: "http://localhost:4010/",
 });
 
 instance.interceptors.request.use(
@@ -14,7 +14,6 @@ instance.interceptors.request.use(
                 throw new axios.Cancel("토큰이 존재하지 않습니다.");
             } else {
                 req.headers.token = store.getToken;
-                console.log(store.getToken);
             }
         }
 
