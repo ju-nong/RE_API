@@ -9,9 +9,9 @@
 
 <script>
 import useStore from "@store";
-import api from "@api/sign";
 
 export default {
+    name: "TheLogin",
     setup() {
         const store = useStore();
 

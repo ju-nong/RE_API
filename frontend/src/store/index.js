@@ -48,19 +48,10 @@ export const useStore = defineStore("store", {
             service
                 .create(name)
                 .then((res) => {
-                    const { status, errorMessage } = res.data;
-                    if (status === 1) {
-                        alert(errorMessage);
-                    } else {
-                        this.read();
-                    }
+                    this._next(res.data);
                 })
                 .catch((error) => {
-                    if (axios.isCancel(error)) {
-                        alert(error.message);
-                    } else {
-                        this.warning(error.reponse);
-                    }
+                    this._exception(error);
                 });
         },
         update() {
@@ -74,19 +65,10 @@ export const useStore = defineStore("store", {
             service
                 .update(id, name)
                 .then((res) => {
-                    const { status, errorMessage } = res.data;
-                    if (status === 1) {
-                        alert(errorMessage);
-                    } else {
-                        this.read();
-                    }
+                    this._next(res.data);
                 })
                 .catch((error) => {
-                    if (axios.isCancel(error)) {
-                        alert(error.message);
-                    } else {
-                        this.warning(error.reponse);
-                    }
+                    this._exception(error);
                 });
         },
         del() {
@@ -99,26 +81,16 @@ export const useStore = defineStore("store", {
             service
                 .delete(id)
                 .then((res) => {
-                    const { status, errorMessage } = res.data;
-                    if (status === 1) {
-                        alert(errorMessage);
-                    } else {
-                        this.read();
-                    }
+                    this._next(res.data);
                 })
                 .catch((error) => {
-                    if (axios.isCancel(error)) {
-                        alert(error.message);
-                    } else {
-                        this.warning(error.reponse);
-                    }
+                    this._exception(error);
                 });
         },
         read() {
             service
                 .read()
                 .then((res) => {
-                    console.log(res);
                     if (res.data.status === 1) {
                         this.warning(res);
                     } else {
@@ -126,16 +98,25 @@ export const useStore = defineStore("store", {
                     }
                 })
                 .catch((error) => {
-                    console.log("error", error);
-                    if (axios.isCancel(error)) {
-                        alert(error.message);
-                    } else {
-                        this.warning(error.reponse);
-                    }
+                    this._exception(error);
                 });
         },
         warning(target) {
             alert(target.data.errorMessage);
+        },
+        _next({ status, errorMessage }) {
+            if (status === 1) {
+                alert(errorMessage);
+            } else {
+                this.read();
+            }
+        },
+        _exception(error) {
+            if (axios.isCancel(error)) {
+                alert(error.message);
+            } else {
+                this._warning(error.reponse);
+            }
         },
     },
     getters: {

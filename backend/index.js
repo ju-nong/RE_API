@@ -10,10 +10,6 @@ function rand() {
     return `t${Math.random().toString(36).substr(2, 11)}`;
 }
 
-function chk(token) {
-    return tokens.includes(token);
-}
-
 function isNull(node) {
     return node === null || node == undefined;
 }
@@ -73,16 +69,15 @@ app.post("/service/update", (req, res, next) => {
     const target = list[req.headers.token];
     const child = target[id];
 
-    if (child === null || child === undefined) {
-        // 동작을 잘 되는데 서버에서 에러남
+    if (isNull(child)) {
         next(new Error(empty));
-    }
-
-    if (target.includes(name)) {
-        next(new Error(over));
     } else {
-        target[id] = name;
-        res.send(sendData({}));
+        if (target.includes(name)) {
+            next(new Error(over));
+        } else {
+            target[id] = name;
+            res.send(sendData({}));
+        }
     }
 });
 
@@ -92,18 +87,17 @@ app.post("/service/delete", (req, res, next) => {
     const target = list[req.headers.token];
     const child = target[id];
 
-    if (child === null || child === undefined) {
-        // 동작을 잘 되는데 서버에서 에러남
+    if (isNull(child)) {
         next(new Error(empty));
+    } else {
+        target.splice(id, 1);
+
+        res.send(sendData({}));
     }
-
-    target.splice(id, 1);
-
-    res.send(sendData({}));
 });
 
 app.get("/service/read", (req, res, next) => {
-    const random = Math.floor(Math.random() * 10) + 1;
+    const random = Math.floor(Math.random() * 10) + 1; // 10% 확률로 오류
     const token = req.headers.token;
 
     res.send(

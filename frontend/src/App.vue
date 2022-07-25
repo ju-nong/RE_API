@@ -1,20 +1,15 @@
 <template>
-    <Login />
-    <Main />
+    <TheLogin />
+    <TheMain />
 </template>
 
 <script>
-import Login from "@components/Login";
-import Main from "@components/Main";
-import useStore from "@store";
+import TheLogin from "@components/TheLogin";
+import TheMain from "@components/TheMain";
 
 export default {
     name: "App",
-    components: { Login, Main },
-    setup() {
-        const store = useStore();
-        return { store };
-    },
+    components: { TheLogin, TheMain },
 };
 </script>
 

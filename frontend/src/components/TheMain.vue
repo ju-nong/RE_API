@@ -2,7 +2,7 @@
     <div class="wrap">
         <div class="title">
             <p>
-                Token : <span class="active">{{ store.getToken }}</span>
+                Token : <span class="active">{{ token }}</span>
             </p>
         </div>
         <main>
@@ -48,11 +48,12 @@
 </template>
 
 <script>
-import { reactive, ref } from "vue";
+import { ref, computed } from "vue";
 
 import useStore from "@store";
 
 export default {
+    name: "TheMain",
     setup() {
         const store = useStore();
 
@@ -62,6 +63,10 @@ export default {
         const type = ref("create");
         const showId = ref(false);
         const showName = ref(true);
+
+        const token = computed(() => {
+            return store.getToken;
+        });
 
         const changeType = () => {
             id.value = "";
@@ -99,7 +104,17 @@ export default {
             name.value = "";
         };
 
-        return { store, id, name, type, showId, showName, changeType, action };
+        return {
+            store,
+            token,
+            id,
+            name,
+            type,
+            showId,
+            showName,
+            changeType,
+            action,
+        };
     },
 };
 </script>
